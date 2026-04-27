@@ -2,8 +2,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Edu Dashboard</title>
-  <style>
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Edu Dashboard</title>  <style>
     :root{
       --bg:#07111f; --card:#0d1b31; --card2:#10223d; --text:#eaf2ff; --muted:#95a7c3;
       --blue:#3b82f6; --green:#22c55e; --red:#ef4444; --orange:#f59e0b; --border:rgba(255,255,255,.09);
@@ -11,6 +11,15 @@
     }
     *{box-sizing:border-box}
     body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#050b14,#0b1b35);color:var(--text)}
+
+    /* Password protection: hide everything until unlocked */
+    body.auth-locked > *:not(#authOverlay){display:none!important}
+    #authOverlay{min-height:100vh;display:grid;place-items:center;background:#050b14;color:#fff;text-align:center;padding:20px;font-family:Arial,Helvetica,sans-serif}
+    #authOverlay .login-card{width:min(420px,100%);background:#0d1b31;border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:24px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+    #authOverlay input{width:100%;padding:13px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:#081426;color:#fff;margin:12px 0;outline:none}
+    #authOverlay button{width:100%;border:0;border-radius:12px;padding:12px;font-weight:800;cursor:pointer;background:#3b82f6;color:white}
+    #authError{color:#fca5a5;font-size:13px;min-height:18px;margin-top:10px}
+
     button,input,textarea{font:inherit}
     button{border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;color:#fff;background:#475569}
     button.primary{background:var(--blue)} button.green{background:var(--green)} button.red{background:var(--red)} button.orange{background:var(--orange);color:#111827}
@@ -31,10 +40,55 @@
     .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat{background:#091529;border:1px solid var(--border);border-radius:16px;padding:14px}.stat b{font-size:26px;display:block;margin-top:6px}.empty{padding:20px;border:1px dashed var(--border);border-radius:14px;text-align:center;color:var(--muted)}a{color:#93c5fd;text-decoration:none;font-weight:800}
     @media(max-width:900px){.grid,.admin-grid{grid-template-columns:1fr}.side{max-height:none}.stats{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:560px){.stats{grid-template-columns:1fr}.top-inner{align-items:flex-start}.nav button{padding:9px 10px}}
-  </style>
-</head>
-<body>
-<script src="https://www.youtube.com/iframe_api"></script><header class="top">
+  </style></head>
+<body class="auth-locked"><div id="authOverlay">
+  <div class="login-card">
+    <h1>Private Course</h1>
+    <p class="muted">Password ছাড়া এই website দেখা যাবে না।</p>
+    <input id="sitePassInput" type="password" placeholder="Enter password" autocomplete="off" />
+    <button onclick="checkSitePassword()">Enter Website</button>
+    <div id="authError"></div>
+  </div>
+</div><script>
+const SITE_PASSWORD = "mysecret123";
+
+function unlockSite(){
+  sessionStorage.setItem("access_granted", "true");
+  document.body.classList.remove("auth-locked");
+  const overlay = document.getElementById("authOverlay");
+  if (overlay) overlay.remove();
+}
+
+function denySite(){
+  document.body.classList.add("auth-locked");
+  const err = document.getElementById("authError");
+  if (err) err.textContent = "Wrong password. Try again.";
+}
+
+function checkSitePassword(){
+  const input = document.getElementById("sitePassInput");
+  const pass = input ? input.value : "";
+  if (pass === SITE_PASSWORD) unlockSite();
+  else denySite();
+}
+
+(function protectSite(){
+  if (sessionStorage.getItem("access_granted") === "true") {
+    unlockSite();
+    return;
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    const input = document.getElementById("sitePassInput");
+    if (input) {
+      input.focus();
+      input.addEventListener("keydown", function(e){
+        if (e.key === "Enter") checkSitePassword();
+      });
+    }
+  });
+})();
+</script><script src="https://www.youtube.com/iframe_api"></script><header class="top">
   <div class="top-inner">
     <div><div class="brand" id="siteTitle">Edu Dashboard</div><div class="muted small" id="siteSubtitle">Course • Progress • Syllabus • Owner Panel</div></div>
     <div class="nav">
