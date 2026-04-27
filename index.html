@@ -16,6 +16,8 @@
     }
     *{box-sizing:border-box}
     body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#050b14,#0b1b35);color:var(--text)}
+    body.auth-locked > *:not(#authOverlay){display:none!important}
+#authOverlay{min-height:100vh;display:grid;place-items:center;background:#050b14;color:#fff;text-align:center;padding:20px;font-family:Arial,Helvetica,sans-serif}
     button,input,textarea{font:inherit}
     button{border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;color:#fff;background:#475569}
     button.primary{background:var(--blue)} button.green{background:var(--green)} button.red{background:var(--red)} button.orange{background:var(--orange);color:#111827}
