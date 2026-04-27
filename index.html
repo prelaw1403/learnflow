@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- 👇 এখানে বসাবে -->
+  <meta name="robots" content="noindex, nofollow">
+
+  <title>Edu Dashboard</title>
+  <style>
+    :root{
+      --bg:#07111f; --card:#0d1b31; --card2:#10223d; --text:#eaf2ff; --muted:#95a7c3;
+      --blue:#3b82f6; --green:#22c55e; --red:#ef4444; --orange:#f59e0b; --border:rgba(255,255,255,.09);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#050b14,#0b1b35);color:var(--text)}
+    button,input,textarea{font:inherit}
+    button{border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;color:#fff;background:#475569}
+    button.primary{background:var(--blue)} button.green{background:var(--green)} button.red{background:var(--red)} button.orange{background:var(--orange);color:#111827}
+    .top{position:sticky;top:0;z-index:10;background:rgba(7,17,31,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+    .top-inner{max-width:1300px;margin:auto;padding:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .brand{font-size:22px;font-weight:900}.nav{display:flex;gap:8px;flex-wrap:wrap}.nav button{background:#172944;border:1px solid var(--border)}
+    .wrap{max-width:1300px;margin:auto;padding:16px}.hidden{display:none!important}
+    .card{background:rgba(13,27,49,.92);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:0 16px 35px rgba(0,0,0,.25)}
+    .grid{display:grid;grid-template-columns:360px 1fr;gap:16px}.admin-grid{display:grid;grid-template-columns:260px 1fr;gap:16px}
+    .side{max-height:calc(100vh - 105px);overflow:auto}.muted{color:var(--muted)}.small{font-size:13px}.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.between{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+    .box{background:#091529;border:1px solid var(--border);border-radius:14px;padding:12px;margin-top:10px}.box2{background:#0c1b34;border:1px solid var(--border);border-radius:14px;padding:12px;margin-top:10px}
+    .lesson{cursor:pointer}.lesson:hover{border-color:rgba(59,130,246,.7)}.active{border-color:var(--blue)!important;background:rgba(59,130,246,.12)!important}
+    .circle{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:900;background:conic-gradient(var(--blue) calc(var(--p)*1%),rgba(255,255,255,.12) 0);position:relative;flex:none}.circle:after{content:"";position:absolute;inset:5px;border-radius:50%;background:#071426}.circle span{z-index:1}.circle.done{background:conic-gradient(var(--green) 100%,rgba(255,255,255,.12) 0)}
+    .badge{padding:5px 9px;border-radius:999px;font-size:12px;font-weight:800}.pending{background:rgba(245,158,11,.16);color:#fcd34d}.progress{background:rgba(59,130,246,.16);color:#bfdbfe}.complete{background:rgba(34,197,94,.16);color:#86efac}
+    .video{aspect-ratio:16/9;background:#000;border-radius:16px;overflow:hidden;border:1px solid var(--border)}#player,#fallback{width:100%;height:100%}#fallback{display:grid;place-items:center;color:var(--muted);padding:20px;text-align:center;background:#061020}
+    .bar-bg{height:11px;background:rgba(255,255,255,.1);border-radius:999px;overflow:hidden}.bar{height:100%;background:linear-gradient(90deg,var(--blue),#8bbcff);width:0%}
+    input,textarea{width:100%;margin-top:6px;margin-bottom:10px;border:1px solid var(--border);background:#081426;color:#fff;border-radius:12px;padding:12px;outline:none}textarea{min-height:80px;resize:vertical}input:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.16)}label{font-size:13px;font-weight:800;color:#c9d8ef}.tabs button{width:100%;justify-content:flex-start;margin-bottom:8px}.tabs .on{background:var(--blue)}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat{background:#091529;border:1px solid var(--border);border-radius:16px;padding:14px}.stat b{font-size:26px;display:block;margin-top:6px}.empty{padding:20px;border:1px dashed var(--border);border-radius:14px;text-align:center;color:var(--muted)}a{color:#93c5fd;text-decoration:none;font-weight:800}
+    @media(max-width:900px){.grid,.admin-grid{grid-template-columns:1fr}.side{max-height:none}.stats{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:560px){.stats{grid-template-columns:1fr}.top-inner{align-items:flex-start}.nav button{padding:9px 10px}}
+  </style>
+</head>
+<body>
+<script>
+const SITE_PASSWORD = "mysecret123";
+
+if (!sessionStorage.getItem("access_granted")) {
+  let pass = prompt("Enter Password");
+
+  if (pass === SITE_PASSWORD) {
+    sessionStorage.setItem("access_granted", "true");
+  } else {
+    // পুরো page stop করে দেবে
+    document.write(`
+      <html>
+      <body style="background:#000;color:#fff;text-align:center;margin-top:100px;font-family:sans-serif;">
+        <h1>Access Denied</h1>
+      </body>
+      </html>
+    `);
+    document.close();
+  }
+}
+</script>
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<header class="top">
+  <div class="top-inner">
+    <div><div class="brand" id="siteTitle">Edu Dashboard</div><div class="muted small" id="siteSubtitle">Course • Progress • Syllabus • Owner Panel</div></div>
+    <div class="nav">
+      <button id="navClient" onclick="showPage('client')">Client</button>
+      <button id="navProgress" onclick="showPage('progress')">Progress</button>
+      <button id="navSyllabus" onclick="showPage('syllabus')">Syllabus</button>
+      <button id="navOwner" class="primary" onclick="ownerLogin()">Owner</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="page-client">
+    <div class="grid">
+      <div class="card side">
+        <div class="between"><h3 id="courseLessonsTitle">Course Lessons</h3><span class="badge progress" id="lessonCount">0</span></div>
+        <div id="lessonTree"></div>
+      </div>
+      <div class="card">
+        <div class="between">
+          <div><h2 id="lessonTitle">No lesson selected</h2><div class="muted small" id="lessonPath">Select a lesson</div></div>
+          <span class="badge pending" id="lessonStatus">Pending</span>
+        </div>
+        <div class="video" style="margin-top:14px"><div id="player"></div><div id="fallback">No video added</div></div>
+        <div class="row" style="margin-top:14px">
+          <div class="circle" id="mainCircle" style="--p:0"><span id="mainPercent">0%</span></div>
+          <div style="flex:1;min-width:220px"><b id="trackTitle">Track Your Progress</b><div class="bar-bg" style="margin-top:8px"><div class="bar" id="mainBar"></div></div><div class="muted small" id="mainMeta" style="margin-top:6px">0% watched</div></div>
+        </div>
+        <div class="box"><h3 id="descTitle">Description</h3><p class="muted" id="lessonDesc">No description added.</p><div id="slideArea"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="page-progress" class="hidden">
+    <div class="card"><h2 id="progressPageTitle">Progress Details</h2><div class="stats" style="margin-top:12px">
+      <div class="stat"><span class="muted">Subjects</span><b id="stSub">0</b></div><div class="stat"><span class="muted">Chapters</span><b id="stChap">0</b></div><div class="stat"><span class="muted">Lessons</span><b id="stLess">0</b></div><div class="stat"><span class="muted">Complete</span><b id="stDone">0</b></div>
+    </div><div class="box"><div class="between"><b>Overall</b><span id="overallText">0%</span></div><div class="bar-bg" style="margin-top:8px"><div class="bar" id="overallBar"></div></div></div><div id="progressList"></div></div>
+  </section>
+
+  <section id="page-syllabus" class="hidden">
+    <div class="card"><h2 id="syllabusPageTitle">Syllabus</h2><div class="muted small">Exam Title → Subject → Chapter</div><div id="syllabusView"></div></div>
+  </section>
+
+  <section id="page-owner" class="hidden">
+    <div class="admin-grid">
+      <div class="card tabs">
+        <h3>Owner Panel</h3><div class="muted small" id="saveText">Saved</div><br>
+        <button id="tabBtn-course" class="on" onclick="ownerTab('course')">Course Builder</button>
+        <button id="tabBtn-syllabus" onclick="ownerTab('syllabus')">Syllabus Builder</button>
+        <button id="tabBtn-settings" onclick="ownerTab('settings')">Settings</button>
+      </div>
+      <div class="card">
+        <div id="owner-course"></div>
+        <div id="owner-syllabus" class="hidden"></div>
+        <div id="owner-settings" class="hidden"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+const KEY='edu_clean_v1';
+let data=load();
+let selected=null;
+let ytReady=false, player=null, currentLesson=null, currentVid='', timer=null, saveTimer=null;
+
+function id(){return 'id_'+Math.random().toString(36).slice(2)+Date.now().toString(36)}
+function demo(){return {title:'Edu Dashboard',subtitle:'Course • Progress • Syllabus • Owner Panel',password:'admin123',theme:{bg1:'#050b14',bg2:'#0b1b35',card:'#0d1b31',card2:'#10223d',text:'#eaf2ff',muted:'#95a7c3',primary:'#3b82f6',green:'#22c55e',red:'#ef4444',orange:'#f59e0b',radius:18},labels:{client:'Client',progress:'Progress',syllabus:'Syllabus',owner:'Owner',courseLessons:'Course Lessons',track:'Track Your Progress',description:'Description',openSlide:'Open Class Slide',noVideo:'No video added',noSlide:'No slide available',noDescription:'No description added.',selectLesson:'Select a lesson',progressTitle:'Progress Details',syllabusTitle:'Syllabus'},subjects:[{id:id(),name:'Mathematics',chapters:[{id:id(),name:'Algebra',lessons:[{id:id(),title:'Intro Class',video:'https://youtu.be/jNQXAC9IVRw',slide:'https://drive.google.com/',desc:'Demo lesson description'}]}]}],syllabus:[{id:id(),title:'Half Yearly',subjects:[{id:id(),name:'Mathematics',chapters:[{id:id(),name:'Algebra'}]}]}],progress:{}}}
+function load(){try{return normalize(JSON.parse(localStorage.getItem(KEY))||demo())}catch(e){return demo()}}
+function normalize(d){let base=demo();d.theme={...base.theme,...(d.theme||{})};d.labels={...base.labels,...(d.labels||{})};d.subtitle=d.subtitle??base.subtitle;d.title=d.title??base.title;d.password=d.password??base.password;d.subjects=d.subjects||base.subjects;d.syllabus=d.syllabus||base.syllabus;d.progress=d.progress||{};return d}
+function applyTheme(){let t=data.theme||{};document.documentElement.style.setProperty('--bg',t.bg1||'#07111f');document.documentElement.style.setProperty('--card',t.card||'#0d1b31');document.documentElement.style.setProperty('--card2',t.card2||'#10223d');document.documentElement.style.setProperty('--text',t.text||'#eaf2ff');document.documentElement.style.setProperty('--muted',t.muted||'#95a7c3');document.documentElement.style.setProperty('--blue',t.primary||'#3b82f6');document.documentElement.style.setProperty('--green',t.green||'#22c55e');document.documentElement.style.setProperty('--red',t.red||'#ef4444');document.documentElement.style.setProperty('--orange',t.orange||'#f59e0b');document.documentElement.style.setProperty('--radius',(t.radius||18)+'px');document.body.style.background=`linear-gradient(135deg,${t.bg1||'#050b14'},${t.bg2||'#0b1b35'})`}
+function applyLabels(){let l=data.labels||{};siteTitle.textContent=data.title||'Edu Dashboard';siteSubtitle.textContent=data.subtitle||'';navClient.textContent=l.client||'Client';navProgress.textContent=l.progress||'Progress';navSyllabus.textContent=l.syllabus||'Syllabus';navOwner.textContent=l.owner||'Owner';courseLessonsTitle.textContent=l.courseLessons||'Course Lessons';trackTitle.textContent=l.track||'Track Your Progress';descTitle.textContent=l.description||'Description';progressPageTitle.textContent=l.progressTitle||'Progress Details';syllabusPageTitle.textContent=l.syllabusTitle||'Syllabus'}
+function saveNow(){localStorage.setItem(KEY,JSON.stringify(data));saveText('Saved')}
+function saveSoft(){saveText('Saving...');clearTimeout(saveTimer);saveTimer=setTimeout(()=>{saveNow();renderPublic()},350)}
+function saveHard(){saveNow();renderAll()}
+function saveText(t){let e=document.getElementById('saveText');if(e)e.textContent=t}
+function esc(s){return String(s||'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[m]))}
+function attr(s){return esc(s).replace(/`/g,'&#096;')}
+function allLessons(){let a=[];data.subjects.forEach(s=>s.chapters.forEach(c=>c.lessons.forEach(l=>a.push({s,c,l}))));return a}
+function pct(lid){return Math.max(0,Math.min(100,Math.round(data.progress[lid]?.percent||0)))}
+function stat(lid){let p=pct(lid);return p>=100?'complete':p>0?'progress':'pending'}
+function statText(x){return x==='complete'?'Complete ✅':x==='progress'?'In Progress':'Pending'}
+function statClass(x){return x==='complete'?'complete':x==='progress'?'progress':'pending'}
+function firstLesson(){return allLessons()[0]?.l.id||null}
+function findLesson(lid){return allLessons().find(x=>x.l.id===lid)||null}
+function showPage(p){['client','progress','syllabus','owner'].forEach(x=>document.getElementById('page-'+x).classList.add('hidden'));document.getElementById('page-'+p).classList.remove('hidden');if(p==='progress')renderProgress();if(p==='syllabus')renderSyllabus();}
+function ownerLogin(){let p=prompt('Owner password');if(p===null)return;if(p!==(data.password||'admin123'))return alert('Wrong password');showPage('owner');renderOwner()}
+function ownerTab(t){['course','syllabus','settings'].forEach(x=>{document.getElementById('owner-'+x).classList.add('hidden');document.getElementById('tabBtn-'+x).classList.remove('on')});document.getElementById('owner-'+t).classList.remove('hidden');document.getElementById('tabBtn-'+t).classList.add('on')}
+
+function renderAll(){if(!selected)selected=firstLesson();renderPublic();renderOwner()}
+function renderPublic(){applyTheme();applyLabels();renderTree();renderViewer();renderProgress();renderSyllabus()}
+function renderTree(){let wrap=document.getElementById('lessonTree');let lessons=allLessons();document.getElementById('lessonCount').textContent=lessons.length+' Lessons';if(!data.subjects.length){wrap.innerHTML='<div class="empty">No subject</div>';return}let h='';data.subjects.forEach(s=>{h+=`<div class="box"><b>${esc(s.name)||'Untitled Subject'}</b>`;if(!s.chapters.length)h+='<div class="muted small">No chapter</div>';s.chapters.forEach(c=>{h+=`<div class="box2"><b>${esc(c.name)||'Untitled Chapter'}</b>`;if(!c.lessons.length)h+='<div class="muted small">No lesson</div>';c.lessons.forEach(l=>{let p=pct(l.id),st=stat(l.id);h+=`<div class="box2 lesson ${selected===l.id?'active':''}" onclick="selectLesson('${l.id}')"><div class="between"><div><b>${esc(l.title)||'Untitled Lesson'}</b><div class="muted small">${statText(st)}</div></div><div class="circle ${st==='complete'?'done':''}" style="--p:${p}"><span>${st==='complete'?'✔':p+'%'}</span></div></div></div>`});h+='</div>'});h+='</div>'});wrap.innerHTML=h}
+function selectLesson(lid){selected=lid;renderTree();renderViewer()}
+function renderViewer(){let x=findLesson(selected);if(!x){document.getElementById('lessonTitle').textContent='No lesson selected';document.getElementById('lessonPath').textContent=data.labels?.selectLesson||'Select a lesson';document.getElementById('fallback').textContent=data.labels?.noVideo||'No video added';document.getElementById('fallback').classList.remove('hidden');document.getElementById('player').classList.add('hidden');stopTimer();return}let {s,c,l}=x,p=pct(l.id),st=stat(l.id);document.getElementById('lessonTitle').textContent=l.title||'Untitled Lesson';document.getElementById('lessonPath').textContent=(s.name||'Untitled Subject')+' → '+(c.name||'Untitled Chapter');let b=document.getElementById('lessonStatus');b.className='badge '+statClass(st);b.textContent=statText(st);document.getElementById('lessonDesc').textContent=l.desc||(data.labels?.noDescription||'No description added.');document.getElementById('mainCircle').style.setProperty('--p',p);document.getElementById('mainCircle').classList.toggle('done',st==='complete');document.getElementById('mainPercent').textContent=st==='complete'?'✔':p+'%';document.getElementById('mainBar').style.width=p+'%';document.getElementById('mainMeta').textContent=p+'% watched';document.getElementById('slideArea').innerHTML=l.slide?`<a href="${attr(l.slide)}" target="_blank">${esc(data.labels?.openSlide||'Open Class Slide')}</a>`:`<span class="muted small">${esc(data.labels?.noSlide||'No slide available')}</span>`;let vid=videoId(l.video);if(vid)loadVideo(l.id,vid);else{document.getElementById('fallback').classList.remove('hidden');document.getElementById('player').classList.add('hidden');stopTimer()}}
+
+function videoId(u){if(!u)return'';let a=u.match(/[?&]v=([^&]+)/);if(a)return a[1];a=u.match(/youtu\.be\/([^?&/]+)/);if(a)return a[1];a=u.match(/youtube\.com\/embed\/([^?&/]+)/);if(a)return a[1];return''}
+function onYouTubeIframeAPIReady(){ytReady=true;if(selected){let x=findLesson(selected);let v=x?videoId(x.l.video):'';if(v)loadVideo(x.l.id,v)}}
+function loadVideo(lid,vid){document.getElementById('fallback').classList.add('hidden');document.getElementById('player').classList.remove('hidden');currentLesson=lid;currentVid=vid;if(!ytReady)return;if(!player){player=new YT.Player('player',{videoId:vid,playerVars:{rel:0,modestbranding:1,playsinline:1},events:{onStateChange:onPlayerStateChange,onReady:seekSaved}})}else{player.loadVideoById(vid);setTimeout(seekSaved,600)}}
+function seekSaved(){let e=data.progress[currentLesson];if(e&&e.seconds>0&&e.videoId===currentVid){try{player.seekTo(e.seconds,true)}catch(_){}}}
+function onPlayerStateChange(e){if(e.data===YT.PlayerState.PLAYING)startTimer();else{stopTimer();capture()}if(e.data===YT.PlayerState.ENDED)commit(currentLesson,100,999999,true)}
+function startTimer(){stopTimer();timer=setInterval(capture,1000)}
+function stopTimer(){if(timer){clearInterval(timer);timer=null}}
+function capture(){if(!player||!currentLesson)return;let dur=0,cur=0;try{dur=player.getDuration()||0;cur=player.getCurrentTime()||0}catch(_){return}if(!dur)return;let p=Math.floor((cur/dur)*100);commit(currentLesson,p,cur,p>=100,false)}
+function commit(lid,p,sec,done,soft){let e=data.progress[lid]||{percent:0,seconds:0,videoId:currentVid};e.percent=Math.max(e.percent||0,Math.min(100,p));e.seconds=Math.max(e.seconds||0,Math.floor(sec||0));e.videoId=currentVid;e.done=done||e.percent>=100;data.progress[lid]=e;if(lid===selected){let st=stat(lid),pp=pct(lid);document.getElementById('mainCircle').style.setProperty('--p',pp);document.getElementById('mainCircle').classList.toggle('done',st==='complete');document.getElementById('mainPercent').textContent=st==='complete'?'✔':pp+'%';document.getElementById('mainBar').style.width=pp+'%';document.getElementById('mainMeta').textContent=pp+'% watched';let b=document.getElementById('lessonStatus');b.className='badge '+statClass(st);b.textContent=statText(st)}saveNow();renderTree();renderProgress()}
+
+function renderProgress(){let lessons=allLessons(),sub=data.subjects.length,chap=0,done=0,sum=0;data.subjects.forEach(s=>chap+=s.chapters.length);lessons.forEach(x=>{let p=pct(x.l.id);sum+=p;if(p>=100)done++});let overall=lessons.length?Math.round(sum/lessons.length):0;stSub.textContent=sub;stChap.textContent=chap;stLess.textContent=lessons.length;stDone.textContent=done;overallText.textContent=overall+'%';overallBar.style.width=overall+'%';let h='';data.subjects.forEach(s=>{let arr=[];s.chapters.forEach(c=>c.lessons.forEach(l=>arr.push(l)));let sp=arr.length?Math.round(arr.reduce((a,l)=>a+pct(l.id),0)/arr.length):0;h+=`<div class="box"><div class="between"><b>${esc(s.name)||'Untitled Subject'}</b><span>${sp}%</span></div><div class="bar-bg"><div class="bar" style="width:${sp}%"></div></div>`;s.chapters.forEach(c=>{let cp=c.lessons.length?Math.round(c.lessons.reduce((a,l)=>a+pct(l.id),0)/c.lessons.length):0;h+=`<div class="box2"><div class="between"><b>${esc(c.name)||'Untitled Chapter'}</b><span>${cp}%</span></div><div class="bar-bg"><div class="bar" style="width:${cp}%"></div></div>`;c.lessons.forEach(l=>{let p=pct(l.id),st=stat(l.id);h+=`<div class="box2"><div class="between"><span>${esc(l.title)||'Untitled Lesson'}</span><span class="badge ${statClass(st)}">${statText(st)}</span></div><div class="bar-bg"><div class="bar" style="width:${p}%"></div></div></div>`});h+='</div>'});h+='</div>'});progressList.innerHTML=h||'<div class="empty">No progress</div>'}
+function renderSyllabus(){let h='';data.syllabus.forEach(e=>{h+=`<div class="box"><h3>${esc(e.title)||'Untitled Exam'}</h3>`;if(!e.subjects.length)h+='<div class="muted small">No subject</div>';e.subjects.forEach(s=>{h+=`<div class="box2"><b>${esc(s.name)||'Untitled Subject'}</b>`;if(!s.chapters.length)h+='<div class="muted small">No chapter</div>';s.chapters.forEach(c=>h+=`<div class="box2">${esc(c.name)||'Untitled Chapter'}</div>`);h+='</div>'});h+='</div>'});syllabusView.innerHTML=h||'<div class="empty">No syllabus</div>'}
+
+function renderOwner(){renderOwnerCourse();renderOwnerSyllabus();renderSettings()}
+function renderOwnerCourse(){let h=`<div class="between"><h2>Course Builder</h2><button class="primary" onclick="addSubject()">+ Subject</button></div>`;data.subjects.forEach(s=>{h+=`<div class="box"><label>Subject Name</label><input value="${attr(s.name)}" oninput="sName('${s.id}',this.value)" placeholder="Subject name"><div class="row"><button class="primary" onclick="addChapter('${s.id}')">+ Chapter</button><button class="red" onclick="delSubject('${s.id}')">Delete</button></div>`;s.chapters.forEach(c=>{h+=`<div class="box2"><label>Chapter Name</label><input value="${attr(c.name)}" oninput="cName('${s.id}','${c.id}',this.value)" placeholder="Chapter name"><div class="row"><button class="primary" onclick="addLesson('${s.id}','${c.id}')">+ Lesson</button><button class="red" onclick="delChapter('${s.id}','${c.id}')">Delete</button></div>`;c.lessons.forEach(l=>{h+=`<div class="box2"><label>Lesson Title</label><input value="${attr(l.title)}" oninput="lField('${s.id}','${c.id}','${l.id}','title',this.value)" placeholder="Lesson title"><label>YouTube Video Link</label><input value="${attr(l.video)}" oninput="lField('${s.id}','${c.id}','${l.id}','video',this.value)" placeholder="https://youtu.be/..."><label>Google Drive Slide Link</label><input value="${attr(l.slide)}" oninput="lField('${s.id}','${c.id}','${l.id}','slide',this.value)" placeholder="https://drive.google.com/..."><label>Description</label><textarea oninput="lField('${s.id}','${c.id}','${l.id}','desc',this.value)" placeholder="Description">${esc(l.desc)}</textarea><button class="red" onclick="delLesson('${s.id}','${c.id}','${l.id}')">Delete Lesson</button></div>`});h+='</div>'});h+='</div>'});document.getElementById('owner-course').innerHTML=h}
+function renderOwnerSyllabus(){let h=`<div class="between"><h2>Syllabus Builder</h2><button class="primary" onclick="addExam()">+ Exam Title</button></div>`;data.syllabus.forEach(e=>{h+=`<div class="box"><label>Exam Title</label><input value="${attr(e.title)}" oninput="examName('${e.id}',this.value)" placeholder="Half Yearly / Final"><div class="row"><button class="primary" onclick="addSylSub('${e.id}')">+ Subject</button><button class="red" onclick="delExam('${e.id}')">Delete</button></div>`;e.subjects.forEach(s=>{h+=`<div class="box2"><label>Subject Name</label><input value="${attr(s.name)}" oninput="sylSubName('${e.id}','${s.id}',this.value)" placeholder="Subject"><div class="row"><button class="primary" onclick="addSylChap('${e.id}','${s.id}')">+ Chapter</button><button class="red" onclick="delSylSub('${e.id}','${s.id}')">Delete</button></div>`;s.chapters.forEach(c=>h+=`<div class="box2"><label>Chapter Name</label><input value="${attr(c.name)}" oninput="sylChapName('${e.id}','${s.id}','${c.id}',this.value)" placeholder="Chapter"><button class="red" onclick="delSylChap('${e.id}','${s.id}','${c.id}')">Delete Chapter</button></div>`);h+='</div>'});h+='</div>'});document.getElementById('owner-syllabus').innerHTML=h}
+function renderSettings(){let t=data.theme||{},l=data.labels||{};document.getElementById('owner-settings').innerHTML=`
+<h2>Settings</h2>
+<div class="box">
+  <h3>Website Info</h3>
+  <label>Website Title</label><input value="${attr(data.title)}" oninput="data.title=this.value;saveSoft();renderPublic()">
+  <label>Website Subtitle</label><input value="${attr(data.subtitle||'')}" oninput="data.subtitle=this.value;saveSoft();renderPublic()">
+  <label>Owner Password</label><input value="${attr(data.password)}" oninput="data.password=this.value;saveSoft()">
+</div>
+<div class="box">
+  <h3>Navbar & Section Text</h3>
+  <label>Client Button</label><input value="${attr(l.client)}" oninput="labelSet('client',this.value)">
+  <label>Progress Button</label><input value="${attr(l.progress)}" oninput="labelSet('progress',this.value)">
+  <label>Syllabus Button</label><input value="${attr(l.syllabus)}" oninput="labelSet('syllabus',this.value)">
+  <label>Owner Button</label><input value="${attr(l.owner)}" oninput="labelSet('owner',this.value)">
+  <label>Course Lessons Title</label><input value="${attr(l.courseLessons)}" oninput="labelSet('courseLessons',this.value)">
+  <label>Track Progress Text</label><input value="${attr(l.track)}" oninput="labelSet('track',this.value)">
+  <label>Description Title</label><input value="${attr(l.description)}" oninput="labelSet('description',this.value)">
+  <label>Progress Page Title</label><input value="${attr(l.progressTitle)}" oninput="labelSet('progressTitle',this.value)">
+  <label>Syllabus Page Title</label><input value="${attr(l.syllabusTitle)}" oninput="labelSet('syllabusTitle',this.value)">
+</div>
+<div class="box">
+  <h3>Fallback Messages</h3>
+  <label>No Video Text</label><input value="${attr(l.noVideo)}" oninput="labelSet('noVideo',this.value)">
+  <label>No Slide Text</label><input value="${attr(l.noSlide)}" oninput="labelSet('noSlide',this.value)">
+  <label>No Description Text</label><input value="${attr(l.noDescription)}" oninput="labelSet('noDescription',this.value)">
+  <label>Select Lesson Text</label><input value="${attr(l.selectLesson)}" oninput="labelSet('selectLesson',this.value)">
+  <label>Open Slide Button Text</label><input value="${attr(l.openSlide)}" oninput="labelSet('openSlide',this.value)">
+</div>
+<div class="box">
+  <h3>Theme Colors</h3>
+  <label>Background Color 1</label><input type="color" value="${attr(t.bg1||'#050b14')}" oninput="themeSet('bg1',this.value)">
+  <label>Background Color 2</label><input type="color" value="${attr(t.bg2||'#0b1b35')}" oninput="themeSet('bg2',this.value)">
+  <label>Card Color</label><input type="color" value="${attr(t.card||'#0d1b31')}" oninput="themeSet('card',this.value)">
+  <label>Nested Card Color</label><input type="color" value="${attr(t.card2||'#10223d')}" oninput="themeSet('card2',this.value)">
+  <label>Text Color</label><input type="color" value="${attr(t.text||'#eaf2ff')}" oninput="themeSet('text',this.value)">
+  <label>Muted Text Color</label><input type="color" value="${attr(t.muted||'#95a7c3')}" oninput="themeSet('muted',this.value)">
+  <label>Primary Color</label><input type="color" value="${attr(t.primary||'#3b82f6')}" oninput="themeSet('primary',this.value)">
+  <label>Success Color</label><input type="color" value="${attr(t.green||'#22c55e')}" oninput="themeSet('green',this.value)">
+  <label>Danger Color</label><input type="color" value="${attr(t.red||'#ef4444')}" oninput="themeSet('red',this.value)">
+  <label>Warning Color</label><input type="color" value="${attr(t.orange||'#f59e0b')}" oninput="themeSet('orange',this.value)">
+  <label>Corner Radius</label><input type="number" min="0" max="40" value="${attr(t.radius||18)}" oninput="themeSet('radius',this.value)">
+</div>
+<div class="box">
+  <h3>Data Control</h3>
+  <div class="row"><button class="orange" onclick="data.progress={};saveHard()">Reset Progress</button><button class="red" onclick="if(confirm('Reset all?')){data=demo();selected=null;saveHard();showPage('client')}">Reset All</button></div>
+</div>`}
+function subj(id){return data.subjects.find(x=>x.id===id)}function chap(sid,cid){return subj(sid)?.chapters.find(x=>x.id===cid)}function les(sid,cid,lid){return chap(sid,cid)?.lessons.find(x=>x.id===lid)}
+function themeSet(k,v){if(!data.theme)data.theme={};data.theme[k]=k==='radius'?Number(v||18):v;saveSoft();applyTheme()}
+function labelSet(k,v){if(!data.labels)data.labels={};data.labels[k]=v;saveSoft();applyLabels();renderViewer();renderTree();renderSyllabus();renderProgress()}
+function addSubject(){data.subjects.push({id:id(),name:'',chapters:[]});saveHard()}function delSubject(sid){data.subjects=data.subjects.filter(x=>x.id!==sid);selected=firstLesson();saveHard()}function sName(sid,v){subj(sid).name=v;saveSoft();renderPublic()}
+function addChapter(sid){subj(sid).chapters.push({id:id(),name:'',lessons:[]});saveHard()}function delChapter(sid,cid){let s=subj(sid);s.chapters=s.chapters.filter(x=>x.id!==cid);selected=firstLesson();saveHard()}function cName(sid,cid,v){chap(sid,cid).name=v;saveSoft();renderPublic()}
+function addLesson(sid,cid){let l={id:id(),title:'',video:'',slide:'',desc:''};chap(sid,cid).lessons.push(l);selected=l.id;saveHard()}function delLesson(sid,cid,lid){let c=chap(sid,cid);c.lessons=c.lessons.filter(x=>x.id!==lid);delete data.progress[lid];selected=firstLesson();saveHard()}function lField(sid,cid,lid,k,v){les(sid,cid,lid)[k]=v;saveSoft();renderPublic()}
+function addExam(){data.syllabus.push({id:id(),title:'',subjects:[]});saveHard()}function delExam(eid){data.syllabus=data.syllabus.filter(x=>x.id!==eid);saveHard()}function exam(eid){return data.syllabus.find(x=>x.id===eid)}function examName(eid,v){exam(eid).title=v;saveSoft();renderSyllabus()}
+function addSylSub(eid){exam(eid).subjects.push({id:id(),name:'',chapters:[]});saveHard()}function sylSub(eid,sid){return exam(eid)?.subjects.find(x=>x.id===sid)}function delSylSub(eid,sid){let e=exam(eid);e.subjects=e.subjects.filter(x=>x.id!==sid);saveHard()}function sylSubName(eid,sid,v){sylSub(eid,sid).name=v;saveSoft();renderSyllabus()}
+function addSylChap(eid,sid){sylSub(eid,sid).chapters.push({id:id(),name:''});saveHard()}function sylChap(eid,sid,cid){return sylSub(eid,sid)?.chapters.find(x=>x.id===cid)}function delSylChap(eid,sid,cid){let s=sylSub(eid,sid);s.chapters=s.chapters.filter(x=>x.id!==cid);saveHard()}function sylChapName(eid,sid,cid,v){sylChap(eid,sid,cid).name=v;saveSoft();renderSyllabus()}
+
+selected=firstLesson();renderAll();showPage('client');
+</script>
+</body>
+</html>
