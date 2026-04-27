@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="bn">
+<!DOCTYPE html><html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- 👇 এখানে বসাবে -->
-  <meta name="robots" content="noindex, nofollow">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Edu Dashboard</title>
   <style>
     :root{
@@ -16,8 +11,6 @@
     }
     *{box-sizing:border-box}
     body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#050b14,#0b1b35);color:var(--text)}
-    body.auth-locked > *:not(#authOverlay){display:none!important}
-#authOverlay{min-height:100vh;display:grid;place-items:center;background:#050b14;color:#fff;text-align:center;padding:20px;font-family:Arial,Helvetica,sans-serif}
     button,input,textarea{font:inherit}
     button{border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;color:#fff;background:#475569}
     button.primary{background:var(--blue)} button.green{background:var(--green)} button.red{background:var(--red)} button.orange{background:var(--orange);color:#111827}
@@ -41,30 +34,7 @@
   </style>
 </head>
 <body>
-<script>
-const SITE_PASSWORD = "mysecret123";
-
-if (!sessionStorage.getItem("access_granted")) {
-  let pass = prompt("Enter Password");
-
-  if (pass === SITE_PASSWORD) {
-    sessionStorage.setItem("access_granted", "true");
-  } else {
-    // পুরো page stop করে দেবে
-    document.write(`
-      <html>
-      <body style="background:#000;color:#fff;text-align:center;margin-top:100px;font-family:sans-serif;">
-        <h1>Access Denied</h1>
-      </body>
-      </html>
-    `);
-    document.close();
-  }
-}
-</script>
-<script src="https://www.youtube.com/iframe_api"></script>
-
-<header class="top">
+<script src="https://www.youtube.com/iframe_api"></script><header class="top">
   <div class="top-inner">
     <div><div class="brand" id="siteTitle">Edu Dashboard</div><div class="muted small" id="siteSubtitle">Course • Progress • Syllabus • Owner Panel</div></div>
     <div class="nav">
@@ -74,9 +44,7 @@ if (!sessionStorage.getItem("access_granted")) {
       <button id="navOwner" class="primary" onclick="ownerLogin()">Owner</button>
     </div>
   </div>
-</header>
-
-<main class="wrap">
+</header><main class="wrap">
   <section id="page-client">
     <div class="grid">
       <div class="card side">
@@ -96,19 +64,13 @@ if (!sessionStorage.getItem("access_granted")) {
         <div class="box"><h3 id="descTitle">Description</h3><p class="muted" id="lessonDesc">No description added.</p><div id="slideArea"></div></div>
       </div>
     </div>
-  </section>
-
-  <section id="page-progress" class="hidden">
+  </section>  <section id="page-progress" class="hidden">
     <div class="card"><h2 id="progressPageTitle">Progress Details</h2><div class="stats" style="margin-top:12px">
       <div class="stat"><span class="muted">Subjects</span><b id="stSub">0</b></div><div class="stat"><span class="muted">Chapters</span><b id="stChap">0</b></div><div class="stat"><span class="muted">Lessons</span><b id="stLess">0</b></div><div class="stat"><span class="muted">Complete</span><b id="stDone">0</b></div>
     </div><div class="box"><div class="between"><b>Overall</b><span id="overallText">0%</span></div><div class="bar-bg" style="margin-top:8px"><div class="bar" id="overallBar"></div></div></div><div id="progressList"></div></div>
-  </section>
-
-  <section id="page-syllabus" class="hidden">
+  </section>  <section id="page-syllabus" class="hidden">
     <div class="card"><h2 id="syllabusPageTitle">Syllabus</h2><div class="muted small">Exam Title → Subject → Chapter</div><div id="syllabusView"></div></div>
-  </section>
-
-  <section id="page-owner" class="hidden">
+  </section>  <section id="page-owner" class="hidden">
     <div class="admin-grid">
       <div class="card tabs">
         <h3>Owner Panel</h3><div class="muted small" id="saveText">Saved</div><br>
@@ -123,9 +85,7 @@ if (!sessionStorage.getItem("access_granted")) {
       </div>
     </div>
   </section>
-</main>
-
-<script>
+</main><script>
 const KEY='edu_clean_v1';
 let data=load();
 let selected=null;
@@ -174,9 +134,8 @@ function renderProgress(){let lessons=allLessons(),sub=data.subjects.length,chap
 function renderSyllabus(){let h='';data.syllabus.forEach(e=>{h+=`<div class="box"><h3>${esc(e.title)||'Untitled Exam'}</h3>`;if(!e.subjects.length)h+='<div class="muted small">No subject</div>';e.subjects.forEach(s=>{h+=`<div class="box2"><b>${esc(s.name)||'Untitled Subject'}</b>`;if(!s.chapters.length)h+='<div class="muted small">No chapter</div>';s.chapters.forEach(c=>h+=`<div class="box2">${esc(c.name)||'Untitled Chapter'}</div>`);h+='</div>'});h+='</div>'});syllabusView.innerHTML=h||'<div class="empty">No syllabus</div>'}
 
 function renderOwner(){renderOwnerCourse();renderOwnerSyllabus();renderSettings()}
-function renderOwnerCourse(){let h=`<div class="between"><h2>Course Builder</h2><button class="primary" onclick="addSubject()">+ Subject</button></div>`;data.subjects.forEach(s=>{h+=`<div class="box"><label>Subject Name</label><input value="${attr(s.name)}" oninput="sName('${s.id}',this.value)" placeholder="Subject name"><div class="row"><button class="primary" onclick="addChapter('${s.id}')">+ Chapter</button><button class="red" onclick="delSubject('${s.id}')">Delete</button></div>`;s.chapters.forEach(c=>{h+=`<div class="box2"><label>Chapter Name</label><input value="${attr(c.name)}" oninput="cName('${s.id}','${c.id}',this.value)" placeholder="Chapter name"><div class="row"><button class="primary" onclick="addLesson('${s.id}','${c.id}')">+ Lesson</button><button class="red" onclick="delChapter('${s.id}','${c.id}')">Delete</button></div>`;c.lessons.forEach(l=>{h+=`<div class="box2"><label>Lesson Title</label><input value="${attr(l.title)}" oninput="lField('${s.id}','${c.id}','${l.id}','title',this.value)" placeholder="Lesson title"><label>YouTube Video Link</label><input value="${attr(l.video)}" oninput="lField('${s.id}','${c.id}','${l.id}','video',this.value)" placeholder="https://youtu.be/..."><label>Google Drive Slide Link</label><input value="${attr(l.slide)}" oninput="lField('${s.id}','${c.id}','${l.id}','slide',this.value)" placeholder="https://drive.google.com/..."><label>Description</label><textarea oninput="lField('${s.id}','${c.id}','${l.id}','desc',this.value)" placeholder="Description">${esc(l.desc)}</textarea><button class="red" onclick="delLesson('${s.id}','${c.id}','${l.id}')">Delete Lesson</button></div>`});h+='</div>'});h+='</div>'});document.getElementById('owner-course').innerHTML=h}
-function renderOwnerSyllabus(){let h=`<div class="between"><h2>Syllabus Builder</h2><button class="primary" onclick="addExam()">+ Exam Title</button></div>`;data.syllabus.forEach(e=>{h+=`<div class="box"><label>Exam Title</label><input value="${attr(e.title)}" oninput="examName('${e.id}',this.value)" placeholder="Half Yearly / Final"><div class="row"><button class="primary" onclick="addSylSub('${e.id}')">+ Subject</button><button class="red" onclick="delExam('${e.id}')">Delete</button></div>`;e.subjects.forEach(s=>{h+=`<div class="box2"><label>Subject Name</label><input value="${attr(s.name)}" oninput="sylSubName('${e.id}','${s.id}',this.value)" placeholder="Subject"><div class="row"><button class="primary" onclick="addSylChap('${e.id}','${s.id}')">+ Chapter</button><button class="red" onclick="delSylSub('${e.id}','${s.id}')">Delete</button></div>`;s.chapters.forEach(c=>h+=`<div class="box2"><label>Chapter Name</label><input value="${attr(c.name)}" oninput="sylChapName('${e.id}','${s.id}','${c.id}',this.value)" placeholder="Chapter"><button class="red" onclick="delSylChap('${e.id}','${s.id}','${c.id}')">Delete Chapter</button></div>`);h+='</div>'});h+='</div>'});document.getElementById('owner-syllabus').innerHTML=h}
-function renderSettings(){let t=data.theme||{},l=data.labels||{};document.getElementById('owner-settings').innerHTML=`
+function renderOwnerCourse(){let h=`<div class="between"><h2>Course Builder</h2><button class="primary" onclick="addSubject()">+ Subject</button></div>`;data.subjects.forEach(s=>{h+=`<div class="box"><label>Subject Name</label><input value="${attr(s.name)}" oninput="sName('${s.id}',this.value)" placeholder="Subject name"><div class="row"><button class="primary" onclick="addChapter('${s.id}')">+ Chapter</button><button class="red" onclick="delSubject('${s.id}')">Delete</button></div>`;s.chapters.forEach(c=>{h+=`<div class="box2"><label>Chapter Name</label><input value="${attr(c.name)}" oninput="cName('${s.id}','${c.id}',this.value)" placeholder="Chapter name"><div class="row"><button class="primary" onclick="addLesson('${s.id}','${c.id}')">+ Lesson</button><button class="red" onclick="delChapter('${s.id}','${c.id}')">Delete</button></div>`;c.lessons.forEach(l=>{h+=`<div class="box2"><label>Lesson Title</label><input value="${attr(l.title)}" oninput="lField('${s.id}','${c.id}','${l.id}','title',this.value)" placeholder="Lesson title"><label>YouTube Video Link</label><input value="${attr(l.video)}" oninput="lField('${s.id}','${c.id}','${l.id}','video',this.value)" placeholder="https://youtu.be/..."><label>Google Drive Slide Link</label><input value="${attr(l.slide)}" oninput="lField('${s.id}','${c.id}','${l.id}','slide',this.value)" placeholder="https://drive.google.com/..."><label>Description</label><textarea oninput="lField('${s.id}','${c.id}','${l.id}','desc',this.value)" placeholder="Description">${esc(l.desc)}</textarea><button class="red" onclick="delLesson('${s.id}','${c.id}','${l.id}')">Delete Lesson</button></div>`});h+='</div>'});h+='</div>'});document.getElementById('owner-course').innerHTML=h}function renderOwnerSyllabus(){let h=<div class="between"><h2>Syllabus Builder</h2><button class="primary" onclick="addExam()">+ Exam Title</button></div>;data.syllabus.forEach(e=>{h+=<div class="box"><label>Exam Title</label><input value="${attr(e.title)}" oninput="examName('${e.id}',this.value)" placeholder="Half Yearly / Final"><div class="row"><button class="primary" onclick="addSylSub('${e.id}')">+ Subject</button><button class="red" onclick="delExam('${e.id}')">Delete</button></div>;e.subjects.forEach(s=>{h+=<div class="box2"><label>Subject Name</label><input value="${attr(s.name)}" oninput="sylSubName('${e.id}','${s.id}',this.value)" placeholder="Subject"><div class="row"><button class="primary" onclick="addSylChap('${e.id}','${s.id}')">+ Chapter</button><button class="red" onclick="delSylSub('${e.id}','${s.id}')">Delete</button></div>;s.chapters.forEach(c=>h+=<div class="box2"><label>Chapter Name</label><input value="${attr(c.name)}" oninput="sylChapName('${e.id}','${s.id}','${c.id}',this.value)" placeholder="Chapter"><button class="red" onclick="delSylChap('${e.id}','${s.id}','${c.id}')">Delete Chapter</button></div>);h+='</div>'});h+='</div>'});document.getElementById('owner-syllabus').innerHTML=h} function renderSettings(){let t=data.theme||{},l=data.labels||{};document.getElementById('owner-settings').innerHTML=`
+
 <h2>Settings</h2>
 <div class="box">
   <h3>Website Info</h3>
@@ -230,9 +189,7 @@ function addChapter(sid){subj(sid).chapters.push({id:id(),name:'',lessons:[]});s
 function addLesson(sid,cid){let l={id:id(),title:'',video:'',slide:'',desc:''};chap(sid,cid).lessons.push(l);selected=l.id;saveHard()}function delLesson(sid,cid,lid){let c=chap(sid,cid);c.lessons=c.lessons.filter(x=>x.id!==lid);delete data.progress[lid];selected=firstLesson();saveHard()}function lField(sid,cid,lid,k,v){les(sid,cid,lid)[k]=v;saveSoft();renderPublic()}
 function addExam(){data.syllabus.push({id:id(),title:'',subjects:[]});saveHard()}function delExam(eid){data.syllabus=data.syllabus.filter(x=>x.id!==eid);saveHard()}function exam(eid){return data.syllabus.find(x=>x.id===eid)}function examName(eid,v){exam(eid).title=v;saveSoft();renderSyllabus()}
 function addSylSub(eid){exam(eid).subjects.push({id:id(),name:'',chapters:[]});saveHard()}function sylSub(eid,sid){return exam(eid)?.subjects.find(x=>x.id===sid)}function delSylSub(eid,sid){let e=exam(eid);e.subjects=e.subjects.filter(x=>x.id!==sid);saveHard()}function sylSubName(eid,sid,v){sylSub(eid,sid).name=v;saveSoft();renderSyllabus()}
-function addSylChap(eid,sid){sylSub(eid,sid).chapters.push({id:id(),name:''});saveHard()}function sylChap(eid,sid,cid){return sylSub(eid,sid)?.chapters.find(x=>x.id===cid)}function delSylChap(eid,sid,cid){let s=sylSub(eid,sid);s.chapters=s.chapters.filter(x=>x.id!==cid);saveHard()}function sylChapName(eid,sid,cid,v){sylChap(eid,sid,cid).name=v;saveSoft();renderSyllabus()}
+function addSylChap(eid,sid){sylSub(eid,sid).chapters.push({id:id(),name:''});saveHard()}function sylChap(eid,sid,cid){return sylSub(eid,sid)?.chapters.find(x=>x.id===cid)}function delSylChap(eid,sid,cid){let s=sylSub(eid,sid);s.chapters=s.chapters.filter(x=>x.id!==cid);saveHard()}function sylChapName(eid,sid,cid,v){sylChap(eid,sid,cid).name=v;saveSoft();renderSyllabus()}selected=firstLesson();renderAll();showPage('client'); </script>
 
-selected=firstLesson();renderAll();showPage('client');
-</script>
 </body>
 </html>
